@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Winamp
+Comment=WACUP under Wine
+Exec=/home/relmen/.qmmp/winamp/wine/run-wacup.sh %f
+Icon=/home/relmen/.qmmp/winamp-alpha.png
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Player;
+MimeType=audio/mpeg;audio/flac;audio/x-flac;audio/ogg;audio/opus;audio/mp4;audio/aac;audio/wav;
+StartupWMClass=wacup.exe
