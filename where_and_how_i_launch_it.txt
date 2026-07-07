@@ -1,0 +1,10 @@
+relmen@relmen:~/.local/share/applications$ cat winamp.desktop 
+[Desktop Entry]
+Name=Winamp
+Exec=WINEPREFIX=/home/relmen/.qmmp/.wine-winamp/ wine /home/relmen/.qmmp/.wine-winamp/drive_c/Program\ Files/WACUP/wacup.exe
+Icon=/home/relmen/.qmmp/winamp-alpha.png
+Terminal=false
+Type=Application
+Categories=AudioVideo;Audio;Player;
+StartupWMClass=wacup.exe
+relmen@relmen:~/.local/share/applications$ 
