@@ -10,8 +10,10 @@ function createWindow() {
     useContentSize: true,
     width: 275,
     height: 348,
-    minWidth: 275,
-    minHeight: 116,
+    resizable: false,
+    maximizable: false,
+    fullscreenable: false,
+    autoHideMenuBar: true,
     backgroundColor: "#000000",
     title: "Winamp",
     webPreferences: {
@@ -39,6 +41,7 @@ function createWindow() {
   Menu.setApplicationMenu(menu);
 
   win.loadFile("index.html");
+  win.once("ready-to-show", () => win.setContentSize(275, 348));
 }
 
 app.whenReady().then(() => {
