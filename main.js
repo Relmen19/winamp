@@ -4,8 +4,14 @@ const path = require("path");
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 600,
-    height: 700,
+    // Size the web content to the default Webamp cluster (main+EQ+playlist,
+    // 275px wide, 3 x 116px tall). Webamp centers itself in #app, so an
+    // exact-fit container fills the window with no black void.
+    useContentSize: true,
+    width: 275,
+    height: 348,
+    minWidth: 275,
+    minHeight: 116,
     backgroundColor: "#000000",
     title: "Winamp",
     webPreferences: {
