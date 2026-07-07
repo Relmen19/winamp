@@ -1,29 +1,37 @@
 #!/usr/bin/env bash
-# Find WACUP/Winamp X11 windows, print their geometry, and force them onto the
-# visible screen. Run this WHILE WACUP is open (icon in the dash).
+# Find every WACUP/Winamp window and force it onto the visible screen + raise it.
+# Works around Wayland/XWayland windows that map off-screen or invisible.
+# Run WHILE WACUP is open.
 set -u
 
 for t in xdotool wmctrl; do
   command -v "$t" >/dev/null || { echo "MISSING $t -> sudo apt install -y xdotool wmctrl"; exit 1; }
 done
 
-# Collect candidate window ids by name and by class.
-ids=$( { xdotool search --name -i winamp; xdotool search --class -i wacup; } 2>/dev/null | sort -u )
+# WACUP's skinned child windows carry these names (class is unreadable on XWayland).
+NAME_RE='WACUP|Winamp|Player Window|Playlist Editor|Album Art|Media Library|Big Clock|Waveform Seeker|Lyrics|Excluded Files'
+
+# ids by name (regex) + ids of managed wacup.exe windows via wmctrl.
+ids=$(
+  { xdotool search --name "$NAME_RE" 2>/dev/null
+    wmctrl -lx 2>/dev/null | awk '/wacup\.exe/{print strtonum($1)}'
+  } | sort -un
+)
 [ -z "$ids" ] && { echo "No WACUP window found. Is it running?"; exit 1; }
 
 echo "=== windows found ==="
 for id in $ids; do
-  name=$(xdotool getwindowname "$id" 2>/dev/null)
-  geo=$(xdotool getwindowgeometry "$id" 2>/dev/null | tr '\n' ' ')
-  echo "[$id] name='$name' :: $geo"
+  printf '[%s] %-20s :: %s\n' "$id" "'$(xdotool getwindowname "$id" 2>/dev/null)'" \
+    "$(xdotool getwindowgeometry "$id" 2>/dev/null | tr '\n' ' ')"
 done
 
-echo "=== forcing each onto screen (100,100 +) ==="
-x=100
+echo "=== mapping + moving onto screen ==="
+x=80
 for id in $ids; do
+  xdotool windowmap "$id" 2>/dev/null      # in case it never mapped
   xdotool windowmove "$id" "$x" "$x" 2>/dev/null
   xdotool windowactivate "$id" 2>/dev/null
   wmctrl -i -a "$id" 2>/dev/null
-  x=$((x+50))
+  x=$((x+40))
 done
-echo "done. See anything now? If still blank -> transparency/layered issue, not position."
+echo "done."
