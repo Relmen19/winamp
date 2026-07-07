@@ -6,6 +6,8 @@ const path = require("path");
 // without root-owning chrome-sandbox after every reinstall. Safe here because
 // we only load bundled local files; revisit if remote/untrusted URLs are added.
 app.commandLine.appendSwitch("no-sandbox");
+// /dev/shm is unusable on some setups; use a temp file for shared memory.
+app.commandLine.appendSwitch("disable-dev-shm-usage");
 
 function createWindow() {
   const win = new BrowserWindow({
